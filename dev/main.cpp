@@ -117,7 +117,7 @@ note getNote(string k){
 	return no;
 }
 void gameStart(){
-	int sumSeconds=0,correctTimes=0,wrongTimes=0;
+	int sumSeconds=0,correctTimes=0,wrongTimes=0,maxSeconds=0,minSeconds=21478596;
 	while(1){
 		int timeStart=time(NULL);
 		cout<<"The ";
@@ -127,14 +127,19 @@ void gameStart(){
 		cout<<fret<<getTh(fret)<<" is ";
 		string notation;
 		cin>>notation;
-		if(notation=="exit")return;
+		if(notation=="exit")break;
 		if(guitar[str][fret]==getNote(notation))
 			cout<<"Correct!"<<endl,correctTimes++;
 		else cout<<"Wrong! The correct answer is "<<guitar[str][fret]<<'.'<<endl,wrongTimes++;
 		int timeEnd=time(NULL);
-		cout<<"It took u "<<timeEnd-timeStart<<" seconds."<<endl;
+		cout<<"It took u "<<timeEnd-timeStart<<" seconds. (Type \"exit\" for results)"<<endl;
 		sumSeconds+=timeEnd-timeStart;
+		maxSeconds=max(maxSeconds,timeEnd-timeStart);
+		minSeconds=min(minSeconds,timeEnd-timeStart);
 	}
+	if(sumSeconds==0)return;
+	cout<<"Correctness:"<<(double)correctTimes/(correctTimes+wrongTimes)*100<<"%"<<endl;
+	cout<<"max/min/avg/sum seconds:"<<maxSeconds<<"/"<<minSeconds<<"/"<<(double)sumSeconds/(correctTimes+wrongTimes)<<"/"<<sumSeconds<<endl;
 }
 int main(){
 	srand(time(NULL));
