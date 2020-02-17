@@ -4,6 +4,8 @@
 #include<cstdlib>
 #include<iomanip>
 #define endl '\n'
+#define red "\033[1;31m"
+#define normal "\033[0m"
 using namespace std;
 class note{
 public:
@@ -38,22 +40,22 @@ void initstring(int str,note no){
 			guitar[str][cnt++]=no;	
 			no.sharp=false;
 		}
-		if(++no.notation>'g'){
+		if(++no.notation>'g')
 			no.notation='a';
+		if(no.notation=='c')
 			no.oct++;
-		}
 	}
 }
 void initguitar(){
 	note no={'e',0,false};
 	initstring(6,no);
-	no={'a',1,false};
+	no={'a',0,false};
 	initstring(5,no);
 	no={'d',1,false};
 	initstring(4,no);
 	no={'g',1,false};
 	initstring(3,no);
-	no={'b',2,false};
+	no={'b',1,false};
 	initstring(2,no);
 	no={'e',2,false};
 	initstring(1,no);
@@ -81,8 +83,11 @@ void showguitar(int l,int r){
 	cout<<endl;
 	for(int i=1;i<=6;i++){
 		cout<<i<<getTh(i)<<' ';
-		for(int j=l;j<=r;j++)
-			cout<<' '<<guitar[i][j];
+		for(int j=l;j<=r;j++){
+			if((guitar[i][j].notation=='c'||guitar[i][j].notation=='f')&&!guitar[i][j].sharp)
+				cout<<' '<<red<<guitar[i][j]<<normal;
+			else cout<<' '<<guitar[i][j];
+		}
 		cout<<endl;
 	}
 }
@@ -111,7 +116,7 @@ note getNote(string k){
 	if(l>=1)no.notation=k[0];
 	if(l>=2){
 		if(k[1]=='#')no.sharp=true;
-		else no.oct=k[2]-'0';
+		else no.oct=k[1]-'0';
 	}
 	if(l>=3&&k[2]=='#')no.sharp=true;
 	return no;
